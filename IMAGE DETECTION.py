@@ -1,5 +1,18 @@
 import cv2
 import os
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
+
+def browse_image():
+    Tk().withdraw()  # Hide the root window
+    file_path = askopenfilename(
+        title="Select an image file",
+        filetypes=[
+            ("Image files", "*.jpg *.jpeg *.png *.bmp *.tiff *.gif *.avif"),
+            ("All files", "*.*")
+        ]
+    )
+    return file_path
 
 def detect_faces_image(image_path):
     img = cv2.imread(image_path)
@@ -31,9 +44,12 @@ def detect_faces_image(image_path):
         cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     cv2.imshow("Faces detected", img)
-
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-detect_faces_image(r"D:\codsoft\detect\images.jpeg")
-detect_faces_image(r"D:\codsoft\detect\images (1).jpeg")
+# ---- Run ----
+selected_image = browse_image()
+if selected_image:
+    detect_faces_image(selected_image)
+else:
+    print("No image selected.")
